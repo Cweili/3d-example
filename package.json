@@ -1,0 +1,26 @@
+{
+  "name": "3d-example",
+  "version": "0.0.1",
+  "description": "3D example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "author": "Cweili",
+  "license": "MIT",
+  "dependencies": {
+    "@sdp.nd/laya-character-dj": "^0.1.0",
+    "@sdp.nd/laya-character-weihua": "^0.1.0",
+    "@sdp.nd/laya-react": "^0.1.0",
+    "@sdp.nd/laya-scene-outdoor": "^0.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@rollup/plugin-babel": "^5.2.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "rollup": "^2.26.9"
+  }
+}

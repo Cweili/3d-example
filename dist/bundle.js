@@ -375,20 +375,36 @@ var component = (function (exports, React) {
 
       _this4 = _BaseScene.call(this) || this;
       _this4.characters = {};
-      _this4.actions = {};
       _this4.events = [];
-      _this4.sceneConfig = props.scene(props);
-      _this4.componentProps = props;
-      _this4.resources = _this4.sceneConfig.resources;
+
+      _this4.trigger = function (actionName) {
+        var action = _this4.sceneConfig.actions[actionName];
+
+        if (action) {
+          for (var _len = arguments.length, payload = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            payload[_key - 1] = arguments[_key];
+          }
+
+          action.call.apply(action, [_assertThisInitialized(_this4), _this4.scene].concat(payload));
+        }
+      };
+
+      _this4.update(props);
+
       return _this4;
     }
 
     var _proto3 = CommonScene.prototype;
 
+    _proto3.update = function update(props) {
+      this.sceneConfig = props.scene(props);
+      this.componentProps = props;
+      this.resources = this.sceneConfig.resources;
+    };
+
     _proto3.loaded = function loaded() {
       this.sceneConfig.init.call(this, this.scene);
       this.initDeferred();
-      this.initActions();
       this.initEvents();
     };
 
@@ -450,29 +466,6 @@ var component = (function (exports, React) {
       }));
     };
 
-    _proto3.initActions = function initActions() {
-      var actions = this.sceneConfig.actions;
-      var handlerArray = Object.keys(actions);
-
-      for (var i = 0; i < handlerArray.length; i++) {
-        var key = handlerArray[i];
-        var action = actions[key];
-        this.actions[key] = action.bind(this);
-      }
-    };
-
-    _proto3.trigger = function trigger(actionName) {
-      var action = this.actions[actionName];
-
-      if (action) {
-        for (var _len = arguments.length, payload = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          payload[_key - 1] = arguments[_key];
-        }
-
-        action.call.apply(action, [this, this.scene].concat(payload));
-      }
-    };
-
     _proto3.initEvents = function initEvents() {
       var _this7 = this;
 
@@ -480,7 +473,13 @@ var component = (function (exports, React) {
       this.events = Object.keys(events).map(function (type) {
         return {
           type: type,
-          handler: _this7.addMouseEvent(type, events[type])
+          handler: _this7.addMouseEvent(type, function () {
+            for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+              args[_key2] = arguments[_key2];
+            }
+
+            return _this7.sceneConfig.events[type].apply(_this7, args);
+          })
         };
       });
     };
@@ -1351,6 +1350,8 @@ var component = (function (exports, React) {
         laya_core.timer.clearAll(window);
         laya_core.Resource.destroyUnusedResources();
         this.initScene();
+      } else {
+        LayaScene.sceneInstance.update(this.props);
       }
     };
 
@@ -1371,8 +1372,8 @@ var component = (function (exports, React) {
     _proto.initScene = function initScene() {
       var sceneInstance = LayaScene.sceneInstance = initLayaScene(_extends({}, this.props));
 
-      if (this.props.getScene) {
-        this.props.getScene(sceneInstance);
+      if (this.props.setScene) {
+        this.props.setScene(sceneInstance);
       }
     };
 

@@ -1,6 +1,6 @@
 {
   "name": "3d-example",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "3D example",
   "main": "index.js",
   "scripts": {
@@ -10,10 +10,10 @@
   "author": "Cweili",
   "license": "MIT",
   "dependencies": {
-    "@sdp.nd/laya-character-dj": "^0.1.0",
-    "@sdp.nd/laya-character-weihua": "^0.1.0",
-    "@sdp.nd/laya-react": "^0.1.0",
-    "@sdp.nd/laya-scene-outdoor": "^0.1.0"
+    "@sdp.nd/laya-character-dj": "^0.2.0",
+    "@sdp.nd/laya-character-weihua": "^0.2.0",
+    "@sdp.nd/laya-react": "^0.2.0",
+    "@sdp.nd/laya-scene-outdoor": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.5",

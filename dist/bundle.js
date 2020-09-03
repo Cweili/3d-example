@@ -377,12 +377,24 @@ var component = (function (exports, React) {
       _this4.characters = {};
       _this4.events = [];
 
+      _this4.setCharacterState = function (name, state) {
+        if (_this4.characters[name]) {
+          var _this4$characters$nam;
+
+          for (var _len = arguments.length, payload = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+            payload[_key - 2] = arguments[_key];
+          }
+
+          (_this4$characters$nam = _this4.characters[name].animationManager).setState.apply(_this4$characters$nam, [state].concat(payload));
+        }
+      };
+
       _this4.trigger = function (actionName) {
         var action = _this4.sceneConfig.actions[actionName];
 
         if (action) {
-          for (var _len = arguments.length, payload = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            payload[_key - 1] = arguments[_key];
+          for (var _len2 = arguments.length, payload = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+            payload[_key2 - 1] = arguments[_key2];
           }
 
           action.call.apply(action, [_assertThisInitialized(_this4), _this4.scene].concat(payload));
@@ -438,8 +450,7 @@ var component = (function (exports, React) {
 
               _this5.characters[character.name] = _extends({}, character, {
                 sprite: charSprite,
-                animationManager: charAniManager,
-                setState: charAniManager.setState.bind(charAniManager)
+                animationManager: charAniManager
               });
               resolve();
             }));
@@ -447,7 +458,10 @@ var component = (function (exports, React) {
         })).then(function () {
           Object.keys(_this5.characters).forEach(function (name) {
             var character = _this5.characters[name];
-            character.setState(character.enterAnimation);
+
+            if (character.enterAnimation) {
+              _this5.setCharacterState(name, character.enterAnimation);
+            }
           });
         })["catch"](function (err) {
           console.error('角色加载失败', err);
@@ -474,8 +488,8 @@ var component = (function (exports, React) {
         return {
           type: type,
           handler: _this7.addMouseEvent(type, function () {
-            for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-              args[_key2] = arguments[_key2];
+            for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+              args[_key3] = arguments[_key3];
             }
 
             return _this7.sceneConfig.events[type].apply(_this7, args);
